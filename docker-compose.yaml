@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  cassandra_1:
+    image: cassandra:latest
+    container_name: csa_1
+    volumes:
+      - ~/apps/cassandra_1:/var/lib/cassandra
+    environment:
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+      - CASSANDRA_SEEDS=cassandra_1,cassandra_2,cassandra_3
+      - CASSANDRA_PASSWORD_SEEDER=yes
+      - CASSANDRA_PASSWORD=password
+    ports:
+      - '9042:9042'
+    networks:
+      test:
+        ipv4_address: 192.168.88.101
+
+  cassandra_2:
+    image: cassandra:latest
+    container_name: csa_2
+    volumes:
+      - ~/apps/cassandra_2:/var/lib/cassandra
+    environment:
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+      - CASSANDRA_SEEDS=cassandra_1,cassandra_2,cassandra_3
+      - CASSANDRA_PASSWORD=password
+    ports:
+      - '9043:9042'
+    networks:
+      test:
+        ipv4_address: 192.168.88.102
+
+  cassandra_3:
+    image: cassandra:latest
+    container_name: csa_3
+    volumes:
+      - ~/apps/cassandra_3:/var/lib/cassandra
+    environment:
+      - CASSANDRA_CLUSTER_NAME=cassandra-cluster
+      - CASSANDRA_SEEDS=cassandra_1,cassandra_2,cassandra_3
+      - CASSANDRA_PASSWORD=password
+    ports:
+      - '9044:9042'
+    networks:
+      test:
+        ipv4_address: 192.168.88.103
+
+networks:
+  test:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.88.0/24
